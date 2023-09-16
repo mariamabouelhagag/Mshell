@@ -2,27 +2,56 @@
 
 int main(void)
 {
-	char *cmd = NULL, *token = NULL, **tokens = NULL, *delim = " \n";
-	size_t n = 0; ssize_t value = 0; int i = 0; 
+	char *cmd = NULL, **tokens = NULL, *full_path = NULL;
+	size_t n = 0;
+	ssize_t value = 0;
+	int i = 0;
+	pid_t pid;
 	
-	char *input = cmd_read(cmd, n, value);
-	char *copy = malloc(_strlen(input) + 1 * sizeof (char ));
-	copy = _strcpy(copy, input);
-	printf("%s \n", input);
-	i = _strlen(input);
-	printf("%d \n", i);
-	printf("%s \n", copy);
-	tokens = split_cmd(cmd, n);
-	int num = 0;
-	while (tokens != NULL)
+	while (1)
 	{
-		printf("%s \n", tokens[num]);
-		num ++ ;
+		value = write(STDOUT_FILENO, "$ ", 2);
+		if (value == -1)
+		{
+			perror("write");
+			exit(EXIT_FAILURE);
+		}
+		tokens = split_cmd(cmd, n);
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			free_tokens(tokens);
+			return (-1);
+		}
+		if (pid == 0)
+		{
+			if (tokens[0] != NULL)
+			{
+				if(_strcmp(tokens[0], "exit") == 0)
+				{
+					break;
+				}
+				extern char** environ;
+				full_path = get_full_path_of_command(tokens[0]);
+				execve(full_path, tokens, environ);
+				perror("./shell");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if (pid > 0)
+		{
+			wait(NULL);
+			if(_strcmp(tokens[0], "exit") == 0)
+			{
+				break;
+			}
+			for (i = 0; tokens[i] != NULL; i++)
+			{
+				free(tokens[i]);
+			}
+		}
 	}
-	for (int j = 0; j < num; j++)
-	{
-		free(tokens[j]);
-	}
-	free(tokens);
-	free(copy);
+	free(cmd);
+	return 0;
 }
