@@ -4,9 +4,9 @@ int main(void)
 {
 	char *cmd = NULL, **tokens = NULL, *full_path = NULL;
 	size_t n = 0;
-	ssize_t value = 0;
 	int i = 0;
 	pid_t pid;
+	extern char** environ;
 	
 	while (1)
 	{
@@ -27,7 +27,7 @@ int main(void)
 				{
 					break;
 				}
-				extern char** environ;
+				
 				full_path = get_full_path_of_command(tokens[0]);
 				execve(full_path, tokens, environ);
 				perror("./shell");

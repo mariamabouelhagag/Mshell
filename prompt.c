@@ -11,3 +11,4 @@ void display_prompt()
 			exit(EXIT_FAILURE);
 		}
 }
+}
