@@ -10,12 +10,7 @@ int main(void)
 	
 	while (1)
 	{
-		value = write(STDOUT_FILENO, "$ ", 2);
-		if (value == -1)
-		{
-			perror("write");
-			exit(EXIT_FAILURE);
-		}
+		display_prompt();
 		tokens = split_cmd(cmd, n);
 		pid = fork();
 		if (pid == -1)

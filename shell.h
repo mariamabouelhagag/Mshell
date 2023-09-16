@@ -31,6 +31,6 @@ char* get_full_path_of_command(const char* command);
 void execute_builtin(char **tokens);
 void free_tokens(char **tokens);
 int is_command_builtin(char* command);
-
+void display_prompt();
 
 #endif
