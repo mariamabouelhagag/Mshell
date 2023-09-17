@@ -1,6 +1,7 @@
 #include "shell.h"
 char* get_full_path_of_command(const char* command)
 {
+	struct stat file_stat;
 	const char* path = _getenv("PATH");
 	char* path_copy = malloc(_strlen(path) + 1);
 	_strcpy(path_copy, path);
@@ -10,7 +11,7 @@ char* get_full_path_of_command(const char* command)
 	{
 		size_t dir_len = _strlen(dir);
 		size_t command_len = _strlen(command);
-		char* full_path = malloc(dir_len + 1 + command_len + 1);
+		char *path = malloc(dir_len + 1 + command_len + 1);
 		if (full_path == NULL)
 		{
 			perror("Memory allocation");
@@ -21,7 +22,7 @@ char* get_full_path_of_command(const char* command)
 		_strcat(full_path, "/");
 		_strcat(full_path, command);
 		
-		struct stat file_stat;
+		
 		if (stat(full_path, &file_stat) == 0 && file_stat.st_mode & S_IXUSR)
 		{
 			free(path_copy);
