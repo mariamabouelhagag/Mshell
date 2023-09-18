@@ -10,7 +10,7 @@ int _unsetenv(const char *cm)
 	size_t len = _strlen(cm);
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		if (_strncmp(environ[i], cm, len) == 0 && environ[i][len] == '=')
+		if (_strcmp(environ[i], cm) == 0 && environ[i][len] == '=')
 		{
 			for (a = i; environ[a] != NULL; a++)
 			{
@@ -34,7 +34,7 @@ void _setenv(const char *cm, const char *value)
 	int i;
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		if (_strncmp(environ[i], cm, cm_len) == 0 && environ[i][cm_len] == '=')
+		if (_strcmp(environ[i], cm) == 0 && environ[i][cm_len] == '=')
 		{
 			environ[i] = env_var;
 			break;
@@ -67,6 +67,7 @@ int handel_cd(char **tokens)
 		else
 		{
 			DIR *dir;
+			
 			struct dirent *entry;
 			dir = opendir(tokens[1]);
 			if (dir == NULL)
@@ -78,6 +79,7 @@ int handel_cd(char **tokens)
 				printf("%s\n", entry->d_name);
 		}
 		closedir(dir);
-		return result;
 	}
+		return result;
 }
+

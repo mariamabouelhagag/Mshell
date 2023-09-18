@@ -11,7 +11,8 @@ char* get_full_path_of_command(const char* command)
 	{
 		size_t dir_len = _strlen(dir);
 		size_t command_len = _strlen(command);
-		char *path = malloc(dir_len + 1 + command_len + 1);
+	
+		char *full_path = malloc(dir_len + command_len + 2);
 		if (full_path == NULL)
 		{
 			perror("Memory allocation");
